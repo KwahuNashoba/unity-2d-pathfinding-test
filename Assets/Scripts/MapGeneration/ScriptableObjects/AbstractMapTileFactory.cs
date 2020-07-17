@@ -2,30 +2,25 @@
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public abstract class AbstractTilemapFactory : ScriptableObject
+public abstract class AbstractTilemapFactory : TilemapWriter
 {
-    // NOTE: you might want to change Grid type with Transform
-    public void GenerateTilemap(
+    public void WriteTiles(
         Grid parentGrid,    
-        GameObject tileMapTemplate,
+        GameObject tilemapTemplate,
         IList<Vector3Int> tilePositions,
         MapTileSprites spriteSet,
         OptionSettings gameOptions
     )
     {
         // each factory generates new child "sprite layer" and then populates it with tiles
-        GameObject tilemapObject = Instantiate(tileMapTemplate, parentGrid.gameObject.transform);
-        tilemapObject.name = GenerateTilemapName();
-        Tilemap tilemap = tilemapObject.GetComponent<Tilemap>();
+        Tilemap tilemap = CreateTilemap(parentGrid, tilemapTemplate);
 
         PopulateTilemap(tilePositions, tilemap, spriteSet, gameOptions);
     }
 
-    protected abstract string GenerateTilemapName();
-
     protected abstract void PopulateTilemap(
         IList<Vector3Int> tilePositions,
-        Tilemap tileMap,
+        Tilemap tilemap,
         MapTileSprites spriteSet,
         OptionSettings gameOptions
     );

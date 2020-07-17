@@ -9,10 +9,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bba41806391a43546ac1bda82e9bc559, type: 3}
-  m_Name: GameOptions
+  m_Script: {fileID: 11500000, guid: 7179bf8f3d7076e4e95dbffeac492216, type: 3}
+  m_Name: AStarPathfinder
   m_EditorClassIdentifier: 
-  gridSize: 10
-  startPosition: {x: 0, y: 4}
-  endPosition: {x: 9, y: 4}
-  totalObstacles: 18

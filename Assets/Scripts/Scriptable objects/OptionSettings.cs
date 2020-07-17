@@ -4,6 +4,7 @@
 public class OptionSettings : ScriptableObject
 {
     public int gridSize = 10;
-    public Vector2 startPosition;
-    public Vector2 endPosition;
+    public Vector2Int startPosition = new Vector2Int(0, 4);
+    public Vector2Int endPosition = new Vector2Int(9, 4);
+    public int totalObstacles = 18;
 }

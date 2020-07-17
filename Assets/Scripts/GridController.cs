@@ -12,10 +12,10 @@ public class GridController : MonoBehaviour
     [SerializeField]
     private List<AbstractTilemapFactory> tileFactories;
     
-    // TODO: greed generation can be extracted to method for more flexable controll over generation
+    // TODO: grid generation can be extracted to method for more flexable controll over generation
     void Start()
     {
-        // TODO: move this somewhere else
+        // TODO: move these somewhere else
         transform.position = new Vector3(-options.gridSize/2, -options.gridSize/2, 0);
         Camera.main.orthographicSize = options.gridSize + 2; // TODO: make side margins width independent of tile size/count
 
@@ -33,7 +33,7 @@ public class GridController : MonoBehaviour
     {
         foreach(AbstractTilemapFactory f in tileFactories)
         {
-            f.GenerateTilemap(GetComponent<Grid>(), tileMapPrefab, new List<Vector3Int>(), tileSprites, options);
+            f.WriteTiles(GetComponent<Grid>(), tileMapPrefab, new List<Vector3Int>(), tileSprites, options);
         }
     }
 }
