@@ -1,9 +1,7 @@
-﻿
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Tilemaps;
 
-[CreateAssetMenu(fileName = "WalkableTilesFactory", menuName = "Pathfinding 2D/Tile generators/Walkable", order = 1)]
+[CreateAssetMenu(fileName = "WalkableTilesFactory", menuName = "Pathfinding 2D/Tile generators/Walkable")]
 class WalkableTilemapFactory : AbstractTilemapFactory
 {
     protected override string GenerateTilemapName()
@@ -12,7 +10,7 @@ class WalkableTilemapFactory : AbstractTilemapFactory
     }
 
     protected override void PopulateTilemap(
-        IList<Vector3Int> tilePositions,
+        GameState gameState,
         Tilemap tilemap,
         MapTileSprites spriteSet,
         OptionSettings gameOptions)

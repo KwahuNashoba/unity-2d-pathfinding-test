@@ -7,23 +7,25 @@ public class GameManager : MonoBehaviour
     // TODO: make it singleton or get another solution
 
     [SerializeField]
-    private OptionSettings options;
+    private MapGenerator mapGenerator;
     [SerializeField]
-    private Grid levelGrid;
+    private OptionSettings options;
     [SerializeField]
     private GameObject blankTilemap;
     [SerializeField]
     private List<AbstractPathfindingAlgorithm> pathfinders;
 
+    private GameState gameState;
+
 
     void Start()
-    {
-        OnButtonGoClicked(); // TODO: remove this
-    }
-
-    void Update()
-    {
+    {   
         
+        gameState = new GameState(new Vector2Int(options.gridSize, options.gridSize), options.totalObstacles);
+
+        mapGenerator.GenerateMap(options, gameState);
+
+        OnButtonGoClicked(); // TODO: remove this
     }
 
     public void OnButtonGoClicked()
@@ -37,7 +39,7 @@ public class GameManager : MonoBehaviour
         {
             foreach (var a in pathfinders)
             {
-                Tilemap tilemap = a.CreateTilemap(levelGrid, blankTilemap);
+                Tilemap tilemap = a.CreateTilemap(mapGenerator.Grid, blankTilemap);
                 StartCoroutine(a.FindPath(tilemap, new Tile()));
             }
         }

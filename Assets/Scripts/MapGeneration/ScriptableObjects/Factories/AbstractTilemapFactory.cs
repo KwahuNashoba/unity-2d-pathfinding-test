@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Tilemaps;
 
 public abstract class AbstractTilemapFactory : TilemapWriter
@@ -7,7 +6,7 @@ public abstract class AbstractTilemapFactory : TilemapWriter
     public void WriteTiles(
         Grid parentGrid,    
         GameObject tilemapTemplate,
-        IList<Vector3Int> tilePositions,
+        GameState gameState,
         MapTileSprites spriteSet,
         OptionSettings gameOptions
     )
@@ -15,11 +14,11 @@ public abstract class AbstractTilemapFactory : TilemapWriter
         // each factory generates new child "sprite layer" and then populates it with tiles
         Tilemap tilemap = CreateTilemap(parentGrid, tilemapTemplate);
 
-        PopulateTilemap(tilePositions, tilemap, spriteSet, gameOptions);
+        PopulateTilemap(gameState, tilemap, spriteSet, gameOptions);
     }
 
     protected abstract void PopulateTilemap(
-        IList<Vector3Int> tilePositions,
+        GameState gameState,
         Tilemap tilemap,
         MapTileSprites spriteSet,
         OptionSettings gameOptions
