@@ -3,7 +3,9 @@ guid: 7179bf8f3d7076e4e95dbffeac492216
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - runnerSprite: {fileID: -1331157870597294134, guid: e89f7168ba5f8b146b60f0cb92d031d9, type: 3}
+  - pathfindingMarking: {fileID: -4841454719197134288, guid: e89f7168ba5f8b146b60f0cb92d031d9, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

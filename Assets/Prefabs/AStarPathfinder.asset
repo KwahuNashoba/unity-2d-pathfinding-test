@@ -12,3 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7179bf8f3d7076e4e95dbffeac492216, type: 3}
   m_Name: AStarPathfinder
   m_EditorClassIdentifier: 
+  runnerSprite: {fileID: -7596968052142806567, guid: e89f7168ba5f8b146b60f0cb92d031d9, type: 3}
+  pathfindingMarking: {fileID: -198727332348707972, guid: e89f7168ba5f8b146b60f0cb92d031d9, type: 3}

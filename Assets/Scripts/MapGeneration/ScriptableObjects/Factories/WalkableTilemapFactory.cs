@@ -9,11 +9,7 @@ class WalkableTilemapFactory : AbstractTilemapFactory
         return "Walkable";
     }
 
-    protected override void PopulateTilemap(
-        GameState gameState,
-        Tilemap tilemap,
-        MapTileSprites spriteSet,
-        OptionSettings gameOptions)
+    protected override void PopulateTilemap( GameState gameState, MapTileSprites spriteSet, OptionSettings gameOptions)
     {
         tilemap.size = new Vector3Int(gameOptions.gridSize + 2, gameOptions.gridSize + 2, 0);
 

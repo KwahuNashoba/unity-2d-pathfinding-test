@@ -1,58 +1,68 @@
 ﻿using System.Collections.Generic;
-using System.Collections;
 using UnityEngine;
-using System.Linq;
 
 public class GameState
 {
+    public Vector2Int GridSize { get; set; }
     public IList<Vector2Int> Walkables { get; private set; }
     public IList<Vector2Int> Obstacles { get; private set; }
+    public Vector2Int Start { get; private set; }
+    public Vector2Int End { get; private set; }
 
-    public GameState(Vector2Int gridSize, int obstacleCount)
+    public bool GenerateNewState(Vector2Int start, Vector2Int end, Vector2Int gridSize, int obstacleCount)
     {
-        GenerateNewState(gridSize, obstacleCount);
+        GridSize = gridSize;
+
+        // check if start/end are inside the grid and that obstacle cound is less then total grid fields
+        bool optionsValid = true;
+        optionsValid &= PositionInsideBounds(start.x, start.y, GridSize.x, GridSize.y);
+        optionsValid &= PositionInsideBounds(end.x, end.y, GridSize.x, GridSize.y);
+        optionsValid &= obstacleCount < gridSize.x * gridSize.y;
+        
+        if (!optionsValid) return false;
+
+        Start = start;
+        End = end;
+        GenerateWalkableFields(gridSize);
+        GenerateRandomObstacles(gridSize, obstacleCount);
+
+        // TODO: check if generate state is valid, if not, regenerate it
+        return true;
     }
 
-    public void GenerateNewState(Vector2Int gridSize, int obstacleCount)
+    private bool PositionInsideBounds(int x, int y, int xLength, int yLength)
     {
-        Walkables = GenerateWalkableFields(gridSize);
-        Obstacles = GenerateRandomObstacles(gridSize, obstacleCount);
-
-        Walkables = Walkables.Where(w => !Obstacles.Contains(w)).ToList();
+        return x >= 0 && x < xLength && y >= 0 && y < yLength;
     }
     
-    private IList<Vector2Int> GenerateWalkableFields(Vector2Int gridSize)
+    private void GenerateWalkableFields(Vector2Int gridSize)
     {
-        var walkable = new List<Vector2Int>(gridSize.x * gridSize.y);
+        Walkables = new List<Vector2Int>(gridSize.x * gridSize.y);
         for(int i = 0; i < gridSize.x; ++i)
         {
             for(int j = 0; j < gridSize.y; ++j)
             {
-                walkable.Add(new Vector2Int(i, j));
+                Walkables.Add(new Vector2Int(i, j));
             }
         }
-
-        return walkable;
     }
 
-    // TODO: can this be optimized
-    private IList<Vector2Int> GenerateRandomObstacles(Vector2Int gridSize, int obstacleCount)
+    private void GenerateRandomObstacles(Vector2Int gridSize, int obstacleCount)
     {
-        var obstacles = new List<Vector2Int>(obstacleCount);
+        Obstacles = new List<Vector2Int>(obstacleCount);
 
-        while (obstacles.Count < obstacleCount)
+        while (Obstacles.Count < obstacleCount)
         {
             var obstaclePosition = new Vector2Int(
                 Random.Range(0, gridSize.x - 1),
                 Random.Range(0, gridSize.y - 1)
             );
             
-            if(!obstacles.Contains(obstaclePosition))
+            if(!Obstacles.Contains(obstaclePosition) && Start != obstaclePosition && End != obstaclePosition)
             {
-                obstacles.Add(obstaclePosition);
+                Obstacles.Add(obstaclePosition);
+                Walkables.Remove(obstaclePosition);
             }
         }
-
-        return obstacles;
     }
 }

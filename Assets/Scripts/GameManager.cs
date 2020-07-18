@@ -4,8 +4,6 @@ using UnityEngine.Tilemaps;
 
 public class GameManager : MonoBehaviour
 {
-    // TODO: make it singleton or get another solution
-
     [SerializeField]
     private MapGenerator mapGenerator;
     [SerializeField]
@@ -17,13 +15,24 @@ public class GameManager : MonoBehaviour
 
     private GameState gameState;
 
-
     void Start()
-    {   
+    {
+        gameState = new GameState();
         
-        gameState = new GameState(new Vector2Int(options.gridSize, options.gridSize), options.totalObstacles);
+        bool stateGenerated = gameState.GenerateNewState(
+            options.startPosition,
+            options.endPosition,
+            new Vector2Int(options.gridSize, options.gridSize),
+            options.totalObstacles);
 
-        mapGenerator.GenerateMap(options, gameState);
+        if(!stateGenerated)
+        {
+            // TODO: notify about invalid options
+        }
+        else
+        {
+            mapGenerator.GenerateMap(options, gameState);
+        }
 
         OnButtonGoClicked(); // TODO: remove this
     }
@@ -39,8 +48,9 @@ public class GameManager : MonoBehaviour
         {
             foreach (var a in pathfinders)
             {
-                Tilemap tilemap = a.CreateTilemap(mapGenerator.Grid, blankTilemap);
-                StartCoroutine(a.FindPath(tilemap, new Tile()));
+                a.CreateTilemap(mapGenerator.Grid, blankTilemap);
+                a.ImportState(gameState);
+                StartCoroutine(a.FindPath(gameState));
             }
         }
     }

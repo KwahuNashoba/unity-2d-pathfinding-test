@@ -7,14 +7,20 @@ public class MapGenerator : MonoBehaviour
     private Grid grid;
     public Grid Grid
     {
-        get { return grid ?? GetComponent<Grid>(); }
+        get {
+            if (grid == null)
+            {
+                grid = GetComponent<Grid>();
+            }
+            return grid;
+        }
         private set { grid = value; } 
     }
 
     [SerializeField]
     private MapTileSprites tileSprites;
     [SerializeField]
-    private GameObject tileMapPrefab;
+    private GameObject tilemapPrefab;
     [SerializeField]
     private List<AbstractTilemapFactory> tileFactories;
 
@@ -26,7 +32,8 @@ public class MapGenerator : MonoBehaviour
 
         foreach(AbstractTilemapFactory f in tileFactories)
         {
-            f.WriteTiles(Grid, tileMapPrefab, gameState, tileSprites, options);
+            f.CreateTilemap(Grid, tilemapPrefab);
+            f.WriteTiles(gameState, tileSprites, options);
         }
     }
 }

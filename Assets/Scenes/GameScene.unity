@@ -285,7 +285,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tileSprites: {fileID: 11400000, guid: 57b98a5d82823d346a4e6ce72089b8b5, type: 2}
-  tileMapPrefab: {fileID: 3572457834833518315, guid: b8dca67ec1ccd3f42a175278690dbd57, type: 3}
+  tilemapPrefab: {fileID: 3572457834833518315, guid: b8dca67ec1ccd3f42a175278690dbd57, type: 3}
   tileFactories:
   - {fileID: 11400000, guid: ba891e1b05985bc44a71d70564308e00, type: 2}
   - {fileID: 11400000, guid: 7fff72751c5fdb744b4fc2b2c5aebf54, type: 2}
