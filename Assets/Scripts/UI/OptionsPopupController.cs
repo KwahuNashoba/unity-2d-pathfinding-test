@@ -3,32 +3,27 @@ using UnityEngine.UI;
 
 public class OptionsPopupController : MonoBehaviour
 {
-    [SerializeField] private OptionSettings options;
-
     [SerializeField] private InputField gridSizeInput;
     [SerializeField] private InputField totalObstaclesInput;
     [SerializeField] private XYInput startPositionInput;
     [SerializeField] private XYInput endPositionInput;
 
+    private GameOptions options;
+
     // Start is called before the first frame update
     void Start()
     {
+        options = GameOptions.Options;
         PopulateFieldsFromOptions();
         RegisterCallbacks();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     private void PopulateFieldsFromOptions()
     {
-        gridSizeInput.text = options.gridSize.ToString();
-        totalObstaclesInput.text = options.totalObstacles.ToString();
-        startPositionInput.SetValue(options.startPosition);
-        endPositionInput.SetValue(options.endPosition);
+        gridSizeInput.text = options.GridSize.ToString();
+        totalObstaclesInput.text = options.TotalObstacles.ToString();
+        startPositionInput.SetValue(options.StartPosition);
+        endPositionInput.SetValue(options.EndPosition);
     }
 
     private void RegisterCallbacks()
@@ -36,7 +31,7 @@ public class OptionsPopupController : MonoBehaviour
         gridSizeInput.onValueChanged.AddListener(OnGridSizeChanged);
         totalObstaclesInput.onValueChanged.AddListener(OnTotalObstaclesChanged);
         startPositionInput.onValueChanged = OnStartPositionChanged;
-        startPositionInput.onValueChanged = OnEndPositionChanged;
+        endPositionInput.onValueChanged = OnEndPositionChanged;
     }
 
     public void OnGridSizeChanged(string newSize)
@@ -44,7 +39,8 @@ public class OptionsPopupController : MonoBehaviour
         int parsedSize;
         if(int.TryParse(newSize, out parsedSize))
         {
-            options.gridSize = parsedSize;
+            options.GridSize = parsedSize;
+            options.SaveStateToDisk();
         }
     }
 
@@ -53,16 +49,19 @@ public class OptionsPopupController : MonoBehaviour
         int parsedTotal;
         if(int.TryParse(newTotal, out parsedTotal))
         {
-            options.totalObstacles = parsedTotal;
+            options.TotalObstacles = parsedTotal;
+            options.SaveStateToDisk();
         }
     }
     public void OnStartPositionChanged(Vector2Int newValue)
     {
-        options.startPosition = newValue;
+        options.StartPosition = newValue;
+        options.SaveStateToDisk();
     }
 
     public void OnEndPositionChanged(Vector2Int newValue)
     {
-        options.endPosition = newValue;
+        options.EndPosition = newValue;
+        options.SaveStateToDisk();
     }
 }
