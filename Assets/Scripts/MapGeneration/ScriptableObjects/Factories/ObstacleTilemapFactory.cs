@@ -4,14 +4,19 @@ using UnityEngine.Tilemaps;
 [CreateAssetMenu(fileName = "ObstacleTilesFactory", menuName = "Pathfinding 2D/Tile generators/Obstacle")]
 public class ObstacleTilemapFactory : AbstractTilemapFactory
 {
+    public ObstacleTilemapFactory(Transform parentGrid, GameObject tilemapTemplate)
+        : base(parentGrid, tilemapTemplate) { }
+
     protected override string GenerateTilemapName()
     {
         return "Obstacles";
     }
 
-    protected override void PopulateTilemap(GameState gameState, MapTileSprites spriteSet, OptionSettings gameOptions)
+    protected override void PopulateTilemap(GameState gameState, MapTileSprites spriteSet)
     {
-        tilemap.size = new Vector3Int(gameOptions.gridSize + 2, gameOptions.gridSize + 2, 0);
+        var gameOptions = GameOptions.Options;
+
+        tilemap.size = new Vector3Int(gameOptions.GridSize + 2, gameOptions.GridSize + 2, 0);
         Tile tile = CreateInstance<Tile>();
         tile.sprite = spriteSet.Obstacle;
 

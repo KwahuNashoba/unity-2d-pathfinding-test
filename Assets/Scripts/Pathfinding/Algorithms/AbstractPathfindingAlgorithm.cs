@@ -1,19 +1,35 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 
 // NOTE: this could have been implemented as .NET POCO class
 // but being ScriptableObject lets game designer play with different algorithms with no developer intervention
 // and should be even possible to download new algorithm from server without altering original code
-public abstract class AbstractPathfindingAlgorithm : TilemapWriter
+public abstract class AbstractPathfindingAlgorithm : ScriptableObject
 {
     [SerializeField]
-    protected Sprite runnerSprite;
+    public Sprite RunnerSprite;
     [SerializeField]
-    protected Sprite pathfindingMarking;
+    public Sprite PathfindingMarking;
 
     // NOTE: this havely rellies on the fact that state is static
     // and it's safe for each path finder to recreate it's own version of state
-    public abstract void ImportState(GameState gameState);
-    public abstract IEnumerator FindPath(GameState gameState);
+
+    public IEnumerator ScheduleAndRun(
+        GameState gameState,
+        Action<bool> finishCallback,
+        Action<Vector3Int> runnerPositionUpdated = null,
+        Action<Vector3Int> nodeInspectedCallback = null)
+    {
+        Init(gameState);
+        yield return FindPath(gameState, finishCallback, runnerPositionUpdated, nodeInspectedCallback);
+    }
+
+    protected abstract void Init(GameState gameState);
+    protected abstract IEnumerator FindPath(
+        GameState gameState,
+        Action<bool> finishCallback,
+        Action<Vector3Int> runnerPositionUpdated = null,
+        Action<Vector3Int> nodeInspectedCallback = null);
 
 }

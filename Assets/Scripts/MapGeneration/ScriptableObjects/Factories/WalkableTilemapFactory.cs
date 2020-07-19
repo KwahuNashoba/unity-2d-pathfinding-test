@@ -4,17 +4,23 @@ using UnityEngine.Tilemaps;
 [CreateAssetMenu(fileName = "WalkableTilesFactory", menuName = "Pathfinding 2D/Tile generators/Walkable")]
 class WalkableTilemapFactory : AbstractTilemapFactory
 {
+    public WalkableTilemapFactory(Transform parentGrid, GameObject tilemapTemplate)
+        : base(parentGrid, tilemapTemplate) { }
+
+
     protected override string GenerateTilemapName()
     {
         return "Walkable";
     }
 
-    protected override void PopulateTilemap( GameState gameState, MapTileSprites spriteSet, OptionSettings gameOptions)
+    protected override void PopulateTilemap( GameState gameState, MapTileSprites spriteSet)
     {
-        tilemap.size = new Vector3Int(gameOptions.gridSize + 2, gameOptions.gridSize + 2, 0);
+        var gameOptions = GameOptions.Options;
+
+        tilemap.size = new Vector3Int(gameOptions.GridSize + 2, gameOptions.GridSize + 2, 0);
 
         Tile tile = CreateInstance<Tile>();
-        int minEdgeIndex = -1, maxEdgeIndex = gameOptions.gridSize;
+        int minEdgeIndex = -1, maxEdgeIndex = gameOptions.GridSize;
         // populate edge tiles
         for(int i = 0; i < maxEdgeIndex; ++i)
         {

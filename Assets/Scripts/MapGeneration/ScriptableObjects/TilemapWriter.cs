@@ -1,20 +1,31 @@
 ﻿using UnityEngine;
 using UnityEngine.Tilemaps;
 
+// TODO: classes extending this one should be refactored towards composition instead of inheretance
 public abstract class TilemapWriter : ScriptableObject
 {
     protected Tilemap tilemap;
 
-    // TODO: make this somehow auto-call
-    // TODO: you might want to change Grid type with Transform
-    public void CreateTilemap(
-        Grid parentGrid,
+    public TilemapWriter(Transform parentGrid, GameObject tilemapTemplate)
+    {
+        tilemap = CreateTilemap(parentGrid, tilemapTemplate);
+    }
+
+    // used to initialize state of loaded scriptable objects because
+    // they don't get to call constructors
+    public void Init(Transform parentGrid, GameObject tilemapTemplate)
+    {
+        tilemap = CreateTilemap(parentGrid, tilemapTemplate);
+    }
+
+    public Tilemap CreateTilemap(
+        Transform parentGrid,
         GameObject tilemapTemplate
     )
     {
-        GameObject tilemapObject = Instantiate(tilemapTemplate, parentGrid.gameObject.transform);
+        GameObject tilemapObject = Instantiate(tilemapTemplate, parentGrid);
         tilemapObject.name = GenerateTilemapName();
-        tilemap = tilemapObject.GetComponent<Tilemap>();
+        return tilemapObject.GetComponent<Tilemap>();
     }
 
     protected abstract string GenerateTilemapName();

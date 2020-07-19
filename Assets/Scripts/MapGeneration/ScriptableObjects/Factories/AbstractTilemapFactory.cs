@@ -1,20 +1,20 @@
 ﻿using UnityEngine;
-using UnityEngine.Tilemaps;
 
 public abstract class AbstractTilemapFactory : TilemapWriter
 {
+    public AbstractTilemapFactory(Transform parentGrid, GameObject tilemapTemplate)
+        : base (parentGrid, tilemapTemplate) { }
+
     public void WriteTiles(
         GameState gameState,
-        MapTileSprites spriteSet,
-        OptionSettings gameOptions
+        MapTileSprites spriteSet
     )
     {
-        PopulateTilemap(gameState, spriteSet, gameOptions);
+        PopulateTilemap(gameState, spriteSet);
     }
 
     protected abstract void PopulateTilemap(
         GameState gameState,
-        MapTileSprites spriteSet,
-        OptionSettings gameOptions
+        MapTileSprites spriteSet
     );
 }

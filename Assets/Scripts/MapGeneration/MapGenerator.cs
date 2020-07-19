@@ -24,16 +24,17 @@ public class MapGenerator : MonoBehaviour
     [SerializeField]
     private List<AbstractTilemapFactory> tileFactories;
 
-    public void GenerateMap(OptionSettings options, GameState gameState)
+    public void GenerateMap(GameState gameState)
     {
+        var options = GameOptions.Options;
         // TODO: move these somewhere else
-        transform.position = new Vector3(-options.gridSize / 2, -options.gridSize / 2, 0);
-        Camera.main.orthographicSize = options.gridSize + 2; // TODO: make side margins width independent of tile size/count
+        transform.position = new Vector3(-options.GridSize / 2, -options.GridSize / 4, 0);
+        Camera.main.orthographicSize = options.GridSize + 2; // TODO: make side margins width independent of tile size/count
 
         foreach(AbstractTilemapFactory f in tileFactories)
         {
-            f.CreateTilemap(Grid, tilemapPrefab);
-            f.WriteTiles(gameState, tileSprites, options);
+            f.Init(transform, tilemapPrefab);
+            f.WriteTiles(gameState, tileSprites);
         }
     }
 }

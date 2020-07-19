@@ -3,22 +3,18 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.Tilemaps;
 
 [CreateAssetMenu(fileName = "AStarPathfinder", menuName = "Pathfinding 2D/Algorithms/AStar")]
 public class AStarPathfindingAlgorithm : AbstractPathfindingAlgorithm
 {
     private AStarPathfinderState state;
 
-    public override IEnumerator FindPath(GameState gameState)
+    protected override IEnumerator FindPath(
+        GameState gameState,
+        Action<bool> finishCallback,
+        Action<Vector3Int> runnerPositionUpdated = null,
+        Action<Vector3Int> nodeInspectedCallback = null)
     {
-        // TODO: move these somewhere else
-        Tile runnerTile = CreateInstance<Tile>();
-        runnerTile.sprite = runnerSprite;
-        Tile pathTile = CreateInstance<Tile>();
-        pathTile.sprite = pathfindingMarking;
-
-
         var openNodes = new List<AStarNode>();
         var closedNodes = new List<AStarNode>();
 
@@ -33,11 +29,11 @@ public class AStarPathfindingAlgorithm : AbstractPathfindingAlgorithm
             openNodes.Remove(currentNode);
             closedNodes.Add(currentNode);
 
-            tilemap.SetTile(new Vector3Int(currentNode.x, currentNode.y, 0), runnerTile);
+            runnerPositionUpdated?.Invoke(new Vector3Int(currentNode.x, currentNode.y, 0));
 
             if (currentNode.x == state.endNode.x && currentNode.y == state.endNode.y)
             {
-                // TODO: fire event
+                finishCallback(true);
                 yield break;
             }
 
@@ -45,7 +41,7 @@ public class AStarPathfindingAlgorithm : AbstractPathfindingAlgorithm
             {
                 if (closedNodes.Contains(n)) continue;
 
-                tilemap.SetTile(new Vector3Int(n.x, n.y, 0), pathTile);
+                nodeInspectedCallback?.Invoke(new Vector3Int(n.x, n.y, 0));
 
                 int newNeighborDistance = currentNode.gCost + state.GetCost(currentNode, n);
                 if (n.fCost > newNeighborDistance || !openNodes.Contains(n))
@@ -63,22 +59,20 @@ public class AStarPathfindingAlgorithm : AbstractPathfindingAlgorithm
 
             yield return null;
         }
+
+        finishCallback(false);
     }
 
-    public override void ImportState(GameState gameState)
+    protected override void Init(GameState gameState)
     {
         state = new AStarPathfinderState();
         state.ImportGameState(gameState);
     }
 
-    protected override string GenerateTilemapName()
-    {
-        return "AStar";
-    }
 
     ///////////////////////////////////////////////////////////////////////////////
-    // NOTE: these classes are inside this class so they can be dynamically loaded 
-    // without altering original code of built executable
+    // NOTE: these classes are inside this class so they can be dynamically loaded, 
+    // as assets, without altering original code of built executable
     ///////////////////////////////////////////////////////////////////////////////
     private class AStarPathfinderState : PathfinderState<IList<AStarNode>, AStarNode>
     {
