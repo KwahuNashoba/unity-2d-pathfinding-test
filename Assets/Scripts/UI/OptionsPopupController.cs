@@ -7,6 +7,9 @@ public class OptionsPopupController : MonoBehaviour
     [SerializeField] private InputField totalObstaclesInput;
     [SerializeField] private XYInput startPositionInput;
     [SerializeField] private XYInput endPositionInput;
+    [SerializeField] private Button buttonConfirm;
+    [SerializeField] private Button buttonOptions;
+    [SerializeField] private GameObject pupup;
 
     private GameOptions options;
 
@@ -15,6 +18,8 @@ public class OptionsPopupController : MonoBehaviour
     {
         options = GameOptions.Options;
         PopulateFieldsFromOptions();
+
+        // TODO: on enable/desible should register/unregister callbacks
         RegisterCallbacks();
     }
 
@@ -32,6 +37,8 @@ public class OptionsPopupController : MonoBehaviour
         totalObstaclesInput.onValueChanged.AddListener(OnTotalObstaclesChanged);
         startPositionInput.onValueChanged = OnStartPositionChanged;
         endPositionInput.onValueChanged = OnEndPositionChanged;
+        buttonConfirm.onClick.AddListener(OnConfirmButtonClicked);
+        buttonOptions.onClick.AddListener(OnOptionsButtonClicked);
     }
 
     public void OnGridSizeChanged(string newSize)
@@ -40,7 +47,6 @@ public class OptionsPopupController : MonoBehaviour
         if(int.TryParse(newSize, out parsedSize))
         {
             options.GridSize = parsedSize;
-            options.SaveStateToDisk();
         }
     }
 
@@ -50,18 +56,38 @@ public class OptionsPopupController : MonoBehaviour
         if(int.TryParse(newTotal, out parsedTotal))
         {
             options.TotalObstacles = parsedTotal;
-            options.SaveStateToDisk();
         }
     }
     public void OnStartPositionChanged(Vector2Int newValue)
     {
         options.StartPosition = newValue;
-        options.SaveStateToDisk();
     }
 
     public void OnEndPositionChanged(Vector2Int newValue)
     {
         options.EndPosition = newValue;
+    }
+
+    public void OnConfirmButtonClicked()
+    {
         options.SaveStateToDisk();
+        AnimatePopup(up: false);
+    }
+
+    public void OnOptionsButtonClicked()
+    {
+        AnimatePopup(up: true);
+    }
+
+    private void AnimatePopup(bool up)
+    {
+        // options button is always hidden on the beggining of animation
+        buttonOptions.gameObject.SetActive(false);
+
+        // TODO: launch animation coroutine
+        pupup.SetActive(up);
+
+        // preview option button if pop-up goes down
+        buttonOptions.gameObject.SetActive(!up);
     }
 }

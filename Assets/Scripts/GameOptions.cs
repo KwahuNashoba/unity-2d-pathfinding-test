@@ -2,6 +2,9 @@
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 
+// NOTE: all of this could have been implemented inside OptionSettings with no problems
+// this serves as an example of how this can be done via singleton, that way eliminating
+// the need to manually assign Options asset to all objects using it
 public class GameOptions : MonoBehaviour
 {
 
@@ -49,7 +52,7 @@ public class GameOptions : MonoBehaviour
             {
                 Debug.LogWarning(
                     $"Options still not loaded! Either no GameOptions game object added" +
-                    $" or object still not awaken, try adding GameOptions to any of Scenes" +
+                    $" or object still not awaken, try adding GameOptions prefab to the scene" +
                     $" or rearanging objects in the Hierarchy View");
                 return null;
             }
