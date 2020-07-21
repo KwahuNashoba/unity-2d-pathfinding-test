@@ -43,10 +43,6 @@ public class GameOptions : MonoBehaviour
         {
             if (options != null)
             {
-                if (options.dirty)
-                {
-                    options.LoadFromDisk();
-                }
                 return options;
             } else
             {
@@ -87,7 +83,7 @@ public class GameOptions : MonoBehaviour
         fileStream.Close();
     }
 
-    private void LoadFromDisk()
+    public void LoadFromDisk()
     {
         if (File.Exists(persistentSettingsPath))
         {

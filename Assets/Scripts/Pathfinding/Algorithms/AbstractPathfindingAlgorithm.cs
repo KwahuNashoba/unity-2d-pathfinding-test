@@ -31,5 +31,6 @@ public abstract class AbstractPathfindingAlgorithm : ScriptableObject
         Action<bool> finishCallback,
         Action<Vector3Int> runnerPositionUpdated = null,
         Action<Vector3Int> nodeInspectedCallback = null);
+    public abstract string GetName();
 
 }

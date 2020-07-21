@@ -44,6 +44,7 @@ public class AlgorithmRunner : TilemapWriter
 
     public IEnumerator Run(AbstractPathfindingAlgorithm algorithm)
     {
+        result.AlgorithmName = algorithm.GetName();
         startTime = Time.realtimeSinceStartup;
         yield return algorithm.ScheduleAndRun(gameState, OnPathfindingFinished, OnRunnerMoved, OnNodeInspected);
     }

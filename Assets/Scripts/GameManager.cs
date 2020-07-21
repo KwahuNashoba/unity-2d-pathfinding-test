@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -64,7 +63,6 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            // invoke event so the pathfinder runners get destroyed
             InvokeStateCleanEvent();
             NewStateGeneratedEvent.Invoke();
             mapGenerator.GenerateMap(gameState);
@@ -111,6 +109,8 @@ public class GameManager : MonoBehaviour
         if(--totalRunnersActive == 0)
         {
             //scoreboard.AddResult(currentResult);
+            // increase number of obstacles after each run by one
+            options.TotalObstacles++;
             RunFinishedEvent.Invoke(currentResult);
         }
     }

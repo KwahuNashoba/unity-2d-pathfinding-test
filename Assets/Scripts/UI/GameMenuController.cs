@@ -55,17 +55,18 @@ public class GameMenuController : MonoBehaviour
 
         // TODO: extract this in separate class
         // TODO: clean this mess
+        var spacing = 8;
         float viewholderHeight = ((RectTransform)resultViewholderTemplate.transform).rect.height;
         Vector3 currentElementPosition = ((RectTransform)resultViewholderTemplate.transform).anchoredPosition;
         for (int i = 0; i < scoreboard.Results.Count; ++i)
         {
-            currentElementPosition.y = viewholderHeight / 2 + i * viewholderHeight;
+            currentElementPosition.y = viewholderHeight / 2 + i * (viewholderHeight + spacing);
             var resultView = Instantiate(resultViewholderTemplate, resultList.content.transform);
             ((RectTransform)resultView.transform).anchoredPosition = currentElementPosition;
             resultView.PopulateView(scoreboard.Results[i]);
         }
 
-        ((RectTransform)resultList.content.transform).sizeDelta = new Vector2(0, viewholderHeight * scoreboard.Results.Count);
+        ((RectTransform)resultList.content.transform).sizeDelta = new Vector2(0, (viewholderHeight + spacing) * scoreboard.Results.Count);
     }
 
     private void OnNewResult(PathfinderResult result)

@@ -11,13 +11,12 @@ public class PathfinderResultViewholder : MonoBehaviour
         string results = "";
         foreach (var r in result.AlgorithmResults)
         {
-            results +=$"\n\t- {r.AlgorithmName} s: {r.TotalFieldsInspected} t: {r.TotalTimeElapsed}";
+            results +=$"\n\t- {r.AlgorithmName} | s: {r.TotalFieldsInspected}, t: {r.TotalTimeElapsed}";
         }
 
         formatedResult.text = $"" +
             $"\n{result.RunNumber + 1}#" +
-            $"\ngrid: {result.BoardSize}x{result.BoardSize}" +
-            $"\nobstacles: {result.ObstacleCount}" +
+            $"\ngrid: {result.BoardSize}x{result.BoardSize}, obstacles: {result.ObstacleCount}" +
             $"\nAlgorithms:{results}";
     }
 }

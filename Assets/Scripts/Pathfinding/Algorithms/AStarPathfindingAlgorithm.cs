@@ -9,6 +9,11 @@ public class AStarPathfindingAlgorithm : AbstractPathfindingAlgorithm
 {
     private AStarPathfinderState state;
 
+    public override string GetName()
+    {
+        return "A Star";
+    }
+
     protected override IEnumerator FindPath(
         GameState gameState,
         Action<bool> finishCallback,
