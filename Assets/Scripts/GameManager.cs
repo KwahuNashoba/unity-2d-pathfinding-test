@@ -108,9 +108,6 @@ public class GameManager : MonoBehaviour
 
     private void OnRunnerFinished()
     {
-        // TODO: this should recieve result, status or so
-        // and preform more sofisticated check
-
         if(--totalRunnersActive == 0)
         {
             //scoreboard.AddResult(currentResult);

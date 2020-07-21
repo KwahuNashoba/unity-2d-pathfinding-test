@@ -11,7 +11,7 @@ public class PathfinderResultViewholder : MonoBehaviour
         string results = "";
         foreach (var r in result.AlgorithmResults)
         {
-            results +=$"\n\t- {r.AlgorithmName} t: {r.TotalTimeElapsed} s: {r.TotalFieldsInspected}";
+            results +=$"\n\t- {r.AlgorithmName} s: {r.TotalFieldsInspected} t: {r.TotalTimeElapsed}";
         }
 
         formatedResult.text = $"" +

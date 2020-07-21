@@ -69,8 +69,8 @@ public class GameState
         while (Obstacles.Count < obstacleCount)
         {
             var obstaclePosition = new Vector2Int(
-                Random.Range(0, gridSize.x - 1),
-                Random.Range(0, gridSize.y - 1)
+                Random.Range(0, gridSize.x),
+                Random.Range(0, gridSize.y)
             );
             
             if(!Obstacles.Contains(obstaclePosition) && Start != obstaclePosition && End != obstaclePosition)

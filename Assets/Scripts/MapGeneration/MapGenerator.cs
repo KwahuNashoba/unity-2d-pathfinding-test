@@ -29,12 +29,11 @@ public class MapGenerator : MonoBehaviour
 
     public void GenerateMap(GameState gameState)
     {
-        CleanMap();
-
         var options = GameOptions.Options;
-        // TODO: move these somewhere else
-        transform.position = new Vector3(-options.GridSize / 2, -options.GridSize / 4, 0);
-        Camera.main.orthographicSize = options.GridSize + 2; // TODO: make side margins width independent of tile size/count
+
+        CleanMap();
+        PositionMap(options);
+        FocusCameraOnMap(options);
 
         foreach(AbstractTilemapFactory f in tileFactories)
         {
@@ -42,6 +41,16 @@ public class MapGenerator : MonoBehaviour
             f.WriteTiles(gameState, tileSprites);
             CleanMapEvent.AddListener(f.CleanTilemap);
         }
+    }
+
+    private void PositionMap(GameOptions options)
+    {
+        transform.position = new Vector3(-options.GridSize / 2, -options.GridSize / 4, 0);
+    }
+
+    private void FocusCameraOnMap(GameOptions options)
+    {
+        Camera.main.orthographicSize = options.GridSize + 2;
     }
 
     private void CleanMap()

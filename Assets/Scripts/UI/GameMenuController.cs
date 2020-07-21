@@ -54,6 +54,7 @@ public class GameMenuController : MonoBehaviour
         resultPopup.SetActive(true);
 
         // TODO: extract this in separate class
+        // TODO: clean this mess
         float viewholderHeight = ((RectTransform)resultViewholderTemplate.transform).rect.height;
         Vector3 currentElementPosition = ((RectTransform)resultViewholderTemplate.transform).anchoredPosition;
         for (int i = 0; i < scoreboard.Results.Count; ++i)
@@ -69,8 +70,6 @@ public class GameMenuController : MonoBehaviour
 
     private void OnNewResult(PathfinderResult result)
     {
-        // TODO: clean this mess
-
         scoreboard.AddResult(result);
         pupupAnimator.Animate(up: true);
     }
