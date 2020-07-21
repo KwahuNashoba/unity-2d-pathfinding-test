@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Tilemaps;
 
-// TODO: classes extending this one should be refactored towards composition instead of inheretance
+// TODO: some classes extending this one should be refactored towards composition instead of inheretance
 public abstract class TilemapWriter : ScriptableObject
 {
     protected Tilemap tilemap;
@@ -29,4 +29,5 @@ public abstract class TilemapWriter : ScriptableObject
     }
 
     protected abstract string GenerateTilemapName();
+    public abstract void CleanTilemap();
 }

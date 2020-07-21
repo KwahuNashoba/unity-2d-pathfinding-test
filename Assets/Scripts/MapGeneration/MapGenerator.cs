@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 [RequireComponent(typeof(Grid))]
 public class MapGenerator : MonoBehaviour
@@ -24,8 +25,12 @@ public class MapGenerator : MonoBehaviour
     [SerializeField]
     private List<AbstractTilemapFactory> tileFactories;
 
+    private UnityEvent CleanMapEvent;
+
     public void GenerateMap(GameState gameState)
     {
+        CleanMap();
+
         var options = GameOptions.Options;
         // TODO: move these somewhere else
         transform.position = new Vector3(-options.GridSize / 2, -options.GridSize / 4, 0);
@@ -35,6 +40,18 @@ public class MapGenerator : MonoBehaviour
         {
             f.Init(transform, tilemapPrefab);
             f.WriteTiles(gameState, tileSprites);
+            CleanMapEvent.AddListener(f.CleanTilemap);
         }
+    }
+
+    private void CleanMap()
+    {
+        if(CleanMapEvent == null)
+        {
+            CleanMapEvent = new UnityEvent();
+        }
+
+        CleanMapEvent.Invoke();
+        CleanMapEvent.RemoveAllListeners();
     }
 }

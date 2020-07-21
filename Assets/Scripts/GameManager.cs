@@ -1,28 +1,55 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField]
-    private MapGenerator mapGenerator;
-    [SerializeField]
-    private GameObject tilemapTemplate;
-    [SerializeField]
-    private List<AbstractPathfindingAlgorithm> pathfinders;
-    [SerializeField]
-    private Button buttonGo;
+    [SerializeField] private MapGenerator mapGenerator;
+    [SerializeField] private GameObject tilemapTemplate;
+    [SerializeField] private List<AbstractPathfindingAlgorithm> pathfinders;
+    [SerializeField] private Scoreboard scoreboard;
 
+    public UnityEvent<PathfinderResult> RunFinishedEvent { 
+        get {
+            if(runFinishedEvent == null)
+            {
+                runFinishedEvent = new UnityEvent<PathfinderResult>();
+            }
+            return runFinishedEvent;
+        }
+    }
+    private UnityEvent<PathfinderResult> runFinishedEvent;
+
+    public UnityEvent NewStateGeneratedEvent
+    {
+        get
+        {
+            if (newStateGeneratedEvent == null)
+            {
+                newStateGeneratedEvent = new UnityEvent();
+            }
+            return newStateGeneratedEvent;
+        }
+    }
+    private UnityEvent newStateGeneratedEvent;
 
     private GameState gameState;
     private GameOptions options;
-    private Scoreboard scoreboard;
+    private int totalRunnersActive;
+    private PathfinderResult currentResult;
+    private UnityEvent StateCleanEvent;
+
 
     void Start()
     {
         options = GameOptions.Options;
-        scoreboard = new Scoreboard();
-        
+
+        GenerateNewState();
+    }
+
+    public void GenerateNewState()
+    {
         gameState = new GameState();
         bool stateGenerated = gameState.GenerateNewState(
             options.StartPosition,
@@ -31,26 +58,24 @@ public class GameManager : MonoBehaviour
             options.TotalObstacles,
             pathfinders[0]); // TODO: there should be option to provide exact pathfinder
 
-        if(!stateGenerated)
+        if (!stateGenerated)
         {
             // TODO: notify about invalid options
         }
         else
         {
+            // invoke event so the pathfinder runners get destroyed
+            InvokeStateCleanEvent();
+            NewStateGeneratedEvent.Invoke();
             mapGenerator.GenerateMap(gameState);
         }
-
-        RegisterCallbacks();
     }
 
-    public void OnButtonGoClicked()
+    public void StartPathfinders()
     {
-        StartPathfinders();
-    }
+        totalRunnersActive = 0;
 
-    private void StartPathfinders()
-    {
-        PathfinderResult result = new PathfinderResult()
+        currentResult = new PathfinderResult()
         {
             BoardSize = options.GridSize,
             ObstacleCount = options.TotalObstacles,
@@ -62,23 +87,44 @@ public class GameManager : MonoBehaviour
         {
             foreach (var a in pathfinders)
             {
-                result.AlgorithmResults.Add(new AlgorithmResult());
+                currentResult.AlgorithmResults.Add(new AlgorithmResult());
                 var runner = new AlgorithmRunner(
                     mapGenerator.transform,
                     tilemapTemplate,
                     a.RunnerSprite,
                     a.PathfindingMarking,
                     gameState,
-                    result.AlgorithmResults[result.AlgorithmResults.Count - 1]
+                    currentResult.AlgorithmResults[currentResult.AlgorithmResults.Count - 1]
                 );
 
+                runner.OnFinish.AddListener(OnRunnerFinished);
+                StateCleanEvent.AddListener(() => { DestroyImmediate(runner); });
+
                 StartCoroutine(runner.Run(a));
+                ++totalRunnersActive;
             }
         }
     }
 
-    private void RegisterCallbacks()
+    private void OnRunnerFinished()
     {
-        buttonGo.onClick.AddListener(OnButtonGoClicked);
+        // TODO: this should recieve result, status or so
+        // and preform more sofisticated check
+
+        if(--totalRunnersActive == 0)
+        {
+            //scoreboard.AddResult(currentResult);
+            RunFinishedEvent.Invoke(currentResult);
+        }
+    }
+
+    private void InvokeStateCleanEvent()
+    {
+        if(StateCleanEvent == null)
+        {
+            StateCleanEvent = new UnityEvent();
+        }
+        StateCleanEvent.Invoke();
+        StateCleanEvent.RemoveAllListeners();
     }
 }

@@ -9,7 +9,7 @@ public class OptionsPopupController : MonoBehaviour
     [SerializeField] private XYInput endPositionInput;
     [SerializeField] private Button buttonConfirm;
     [SerializeField] private Button buttonOptions;
-    [SerializeField] private GameObject pupup;
+    [SerializeField] private PopupAnimator pupupAnimator;
 
     private GameOptions options;
 
@@ -20,7 +20,7 @@ public class OptionsPopupController : MonoBehaviour
         PopulateFieldsFromOptions();
 
         // TODO: on enable/desible should register/unregister callbacks
-        RegisterCallbacks();
+        RegisterUICallbacks();
     }
 
     private void PopulateFieldsFromOptions()
@@ -31,7 +31,7 @@ public class OptionsPopupController : MonoBehaviour
         endPositionInput.SetValue(options.EndPosition);
     }
 
-    private void RegisterCallbacks()
+    private void RegisterUICallbacks()
     {
         gridSizeInput.onValueChanged.AddListener(OnGridSizeChanged);
         totalObstaclesInput.onValueChanged.AddListener(OnTotalObstaclesChanged);
@@ -71,23 +71,13 @@ public class OptionsPopupController : MonoBehaviour
     public void OnConfirmButtonClicked()
     {
         options.SaveStateToDisk();
-        AnimatePopup(up: false);
+        pupupAnimator.Animate(up: false);
+        buttonOptions.gameObject.SetActive(true);
     }
 
     public void OnOptionsButtonClicked()
     {
-        AnimatePopup(up: true);
-    }
-
-    private void AnimatePopup(bool up)
-    {
-        // options button is always hidden on the beggining of animation
+        pupupAnimator.Animate(up: true);
         buttonOptions.gameObject.SetActive(false);
-
-        // TODO: launch animation coroutine
-        pupup.SetActive(up);
-
-        // preview option button if pop-up goes down
-        buttonOptions.gameObject.SetActive(!up);
     }
 }

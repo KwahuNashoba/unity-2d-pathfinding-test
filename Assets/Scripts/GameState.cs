@@ -32,6 +32,8 @@ public class GameState
         GenerateWalkableFields(gridSize);
         GenerateRandomObstacles(gridSize, obstacleCount);
 
+        // TODO: this is not working, coroutine needs to be started
+        // this can also lead to stack overflow if there are to many obstacles
         validityTestAlgorithm.ScheduleAndRun(this, (pathFound) =>
         {
             if(!pathFound)
