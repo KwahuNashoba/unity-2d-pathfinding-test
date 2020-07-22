@@ -353,6 +353,7 @@ MonoBehaviour:
   tileSprites: {fileID: 11400000, guid: 57b98a5d82823d346a4e6ce72089b8b5, type: 2}
   tilemapPrefab: {fileID: 3572457834833518315, guid: b8dca67ec1ccd3f42a175278690dbd57, type: 3}
   tileFactories:
+  - {fileID: 11400000, guid: b2b2362fa1d93b74b9f6e9f2c7ea94ed, type: 2}
   - {fileID: 11400000, guid: ba891e1b05985bc44a71d70564308e00, type: 2}
   - {fileID: 11400000, guid: 7fff72751c5fdb744b4fc2b2c5aebf54, type: 2}
 --- !u!156049354 &1193135677
@@ -483,6 +484,10 @@ PrefabInstance:
     - target: {fileID: 2187448915574491116, guid: 00deb1524710c7f478011679761cc80d, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2691213263564157730, guid: 00deb1524710c7f478011679761cc80d, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2980530407866827573, guid: 00deb1524710c7f478011679761cc80d, type: 3}
       propertyPath: m_IsActive

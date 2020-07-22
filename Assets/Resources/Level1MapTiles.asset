@@ -22,3 +22,5 @@ MonoBehaviour:
   BottomEdge: {fileID: -8729800012852162310, guid: e89f7168ba5f8b146b60f0cb92d031d9, type: 3}
   Walkable: {fileID: 2725765477471832989, guid: e89f7168ba5f8b146b60f0cb92d031d9, type: 3}
   Obstacle: {fileID: -6944616801954896882, guid: e89f7168ba5f8b146b60f0cb92d031d9, type: 3}
+  BackgourndPrimary: {fileID: -5682875748408144229, guid: e89f7168ba5f8b146b60f0cb92d031d9, type: 3}
+  BackgoroundSecondary: {fileID: -7679098480107962984, guid: e89f7168ba5f8b146b60f0cb92d031d9, type: 3}

@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 
 [CreateAssetMenu(fileName = "MapSprites", menuName = "Pathfinding 2D/Map Tileset", order = 1)]
+
+// TODO: those should all be tiles instead of sprites
 public class MapTileSprites : ScriptableObject
 {
     public Sprite TopLeftCorner;
@@ -15,4 +17,6 @@ public class MapTileSprites : ScriptableObject
 
     public Sprite Walkable;
     public Sprite Obstacle;
+    public Sprite BackgourndPrimary;
+    public Sprite BackgoroundSecondary;
 }

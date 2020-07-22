@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: AStarPathfinder
   m_EditorClassIdentifier: 
   RunnerSprite: {fileID: 2225421453862188537, guid: 22828468896bdf24ca924f7fc7f02c9d, type: 3}
-  PathfindingMarking: {fileID: 5813680210140340724, guid: 96f7a8d5d9953af49924612f02021e06, type: 3}
+  PathfindingMarking: {fileID: 4660553052405304249, guid: 95e725c1badf6d04eb81eba306019a9b, type: 3}
