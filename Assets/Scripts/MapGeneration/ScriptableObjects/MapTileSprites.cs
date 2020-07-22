@@ -19,4 +19,7 @@ public class MapTileSprites : ScriptableObject
     public Sprite Obstacle;
     public Sprite BackgourndPrimary;
     public Sprite BackgoroundSecondary;
+
+    public Sprite startPosition;
+    public Sprite endPosition;
 }

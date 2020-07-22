@@ -8,6 +8,7 @@ public class GameMenuController : MonoBehaviour
     [SerializeField] private Button buttonNext;
     [SerializeField] private Button buttonHome;
     [SerializeField] private Button buttonHome1;
+    [SerializeField] private Button buttonHome2; // TODO:  OK, this is not funny any more, find solution
     [SerializeField] Button buttonFinish;
     [SerializeField] private Button buttonGo;
     [SerializeField] private PopupAnimator pupupAnimator;
@@ -16,6 +17,7 @@ public class GameMenuController : MonoBehaviour
     [SerializeField] private ScrollRect resultList;
     [SerializeField] private GameObject resultPopup;
     [SerializeField] private PathfinderResultViewholder resultViewholderTemplate;
+    [SerializeField] private PopupAnimator invalidOptionsPopup;
 
 
 
@@ -24,13 +26,23 @@ public class GameMenuController : MonoBehaviour
         RegisterUICallbacks();
 
         gameManager.RunFinishedEvent.AddListener(OnNewResult);
-        gameManager.NewStateGeneratedEvent.AddListener(() => { buttonGo.gameObject.SetActive(true); });
+        gameManager.StateGenerationFinished.AddListener((pathFound) => 
+        { 
+            if(!pathFound)
+            {
+                invalidOptionsPopup.Animate(up: true);
+            }
+            buttonGo.gameObject.SetActive(pathFound);
+        });
+
+        Screen.orientation = ScreenOrientation.Portrait;
     }
 
     private void RegisterUICallbacks()
     {
         buttonHome?.onClick.AddListener(OnButtonHomeClicked);
         buttonHome1?.onClick.AddListener(OnButtonHomeClicked);
+        buttonHome2?.onClick.AddListener(OnButtonHomeClicked);
         buttonNext?.onClick.AddListener(OnButtonNextClicked);
         buttonFinish?.onClick.AddListener(OnButtonFinishClicked);
         buttonGo?.onClick.AddListener(OnButtonGoClicked);
@@ -44,7 +56,7 @@ public class GameMenuController : MonoBehaviour
 
     private void OnButtonNextClicked()
     {
-        gameManager.GenerateNewState();
+        StartCoroutine(gameManager.GenerateNewState());
         pupupAnimator.Animate(up: false);
     }
     

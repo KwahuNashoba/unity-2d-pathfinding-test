@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e615039696da8924598fc6b4c5aa8dff, type: 3}
   m_Name: GreedyPathfinder
   m_EditorClassIdentifier: 
-  RunnerSprite: {fileID: 0}
-  PathfindingMarking: {fileID: 0}
+  RunnerSprite: {fileID: -7173591418748287906, guid: e89f7168ba5f8b146b60f0cb92d031d9, type: 3}
+  PathfindingMarking: {fileID: 7727824016715061634, guid: df0029164dbfa6e47ad305d1ab3f90eb, type: 3}

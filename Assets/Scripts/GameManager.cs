@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -20,18 +21,18 @@ public class GameManager : MonoBehaviour
     }
     private UnityEvent<PathfinderResult> runFinishedEvent;
 
-    public UnityEvent NewStateGeneratedEvent
+    public UnityEvent<bool> StateGenerationFinished
     {
         get
         {
-            if (newStateGeneratedEvent == null)
+            if (stateGenerationFinished == null)
             {
-                newStateGeneratedEvent = new UnityEvent();
+                stateGenerationFinished = new UnityEvent<bool>();
             }
-            return newStateGeneratedEvent;
+            return stateGenerationFinished;
         }
     }
-    private UnityEvent newStateGeneratedEvent;
+    private UnityEvent<bool> stateGenerationFinished;
 
     private GameState gameState;
     private GameOptions options;
@@ -44,29 +45,51 @@ public class GameManager : MonoBehaviour
     {
         options = GameOptions.Options;
 
-        GenerateNewState();
+        StartCoroutine(GenerateNewState());
     }
 
-    public void GenerateNewState()
+    public IEnumerator GenerateNewState()
     {
+        // TODO: add start and end state generation events so progress UI can be activated
         gameState = new GameState();
-        bool stateGenerated = gameState.GenerateNewState(
-            options.StartPosition,
-            options.EndPosition,
-            new Vector2Int(options.GridSize, options.GridSize),
-            options.TotalObstacles,
-            pathfinders[0]); // TODO: there should be option to provide exact pathfinder
+        
+        int attempts = 10;
+        // perform max 10 attempts to generate new state before calling it imposible
+        do
+        {
+            bool stateGenerated = gameState.GenerateNewState(
+                options.StartPosition,
+                options.EndPosition,
+                new Vector2Int(options.GridSize, options.GridSize),
+                options.TotalObstacles);
+            
+            if(stateGenerated)
+            {
+                // TODO: there should be option to provide exact pathfinder
+                yield return StartCoroutine(pathfinders[0].ScheduleAndRun(gameState, (pathFound) => 
+                {
+                    if (attempts == 1 && !pathFound)
+                    {
+                        StateGenerationFinished.Invoke(false);
+                    }
+                    else if (pathFound)
+                    {
+                        InvokeStateCleanEvent();
+                        StateGenerationFinished.Invoke(true);
+                        mapGenerator.GenerateMap(gameState);
 
-        if (!stateGenerated)
-        {
-            // TODO: notify about invalid options
+                        // stop the loop
+                        attempts = 1;
+                    }
+                }));
+            }
+            else
+            {
+                StateGenerationFinished.Invoke(false);
+                yield break;
+            }
         }
-        else
-        {
-            InvokeStateCleanEvent();
-            NewStateGeneratedEvent.Invoke();
-            mapGenerator.GenerateMap(gameState);
-        }
+        while (--attempts > 0);
     }
 
     public void StartPathfinders()

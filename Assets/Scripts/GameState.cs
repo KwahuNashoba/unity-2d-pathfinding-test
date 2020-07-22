@@ -9,14 +9,8 @@ public class GameState
     public Vector2Int Start { get; private set; }
     public Vector2Int End { get; private set; }
 
-    public bool GenerateNewState(
-        Vector2Int start,
-        Vector2Int end,
-        Vector2Int gridSize,
-        int obstacleCount,
-        AbstractPathfindingAlgorithm validityTestAlgorithm)
+    public bool GenerateNewState( Vector2Int start, Vector2Int end, Vector2Int gridSize, int obstacleCount)
     {
-        // TODO: add start and end state generation events so progress UI can be activated
         GridSize = gridSize;
 
         // check if start/end are inside the grid and that obstacle cound is less then total grid fields
@@ -31,16 +25,6 @@ public class GameState
         End = end;
         GenerateWalkableFields(gridSize);
         GenerateRandomObstacles(gridSize, obstacleCount);
-
-        // TODO: this is not working, coroutine needs to be started
-        // this can also lead to stack overflow if there are to many obstacles
-        validityTestAlgorithm.ScheduleAndRun(this, (pathFound) =>
-        {
-            if(!pathFound)
-            {
-                GenerateNewState(start, end, gridSize, obstacleCount, validityTestAlgorithm);
-            }
-        });
 
         return true;
     }
