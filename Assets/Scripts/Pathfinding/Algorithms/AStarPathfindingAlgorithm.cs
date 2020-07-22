@@ -79,6 +79,8 @@ public class AStarPathfindingAlgorithm : AbstractPathfindingAlgorithm
     // NOTE: these classes are inside this class so they can be dynamically loaded, 
     // as assets, without altering original code of built executable
     ///////////////////////////////////////////////////////////////////////////////
+    
+    // TODO: implement heap instead of list to optimize sorting
     private class AStarPathfinderState : PathfinderState<IList<AStarNode>, AStarNode>
     {
         private Vector2Int gridSize;
